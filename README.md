@@ -1,1 +1,1 @@
-IAM is a service where we create policies that are like permissions to the users, groups and resources to talk to each other in the cloud. we connect to aws from local browser with the healp of internet and with the help of vpn from company.
+IAM is a service where we are able to manage whole aws resources by setting them perissions.
