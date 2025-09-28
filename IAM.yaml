@@ -1,0 +1,36 @@
+IAM (Identity and Access Management) is an AWS service used to manage access and security across all AWS resources. It provides two main access methods: programmatic access (using tools like AWS CLI or SDKs for languages such as .NET, Java, Python) and console access (web-based UI). IAM allows you to create users and set passwords. There are two types of accounts: the root account (accessed with email and password) and IAM user accounts (accessed with a username and password created during user setup).
+
+For programmatic access, authentication is required using an access key and secret key. Each user can have up to two key pairs, and lost keys cannot be recovered—they must be deleted and recreated. The aws configure command is used to set up authentication, and sharing keys is strongly discouraged.
+
+IAM supports user groups, which are collections of users. Permissions are managed through policies, which define what resources can be accessed. There are two types of policies: AWS-managed policies (provided by AWS) and customer-managed or inline policies (created by users). Users can create custom policies using the policy editor or generator. Each IAM user or group can have up to 10 policies attached, and policies can be added or removed at any time. Users can belong to multiple groups simultaneously.
+
+Permissions can be user-based (typically AWS-managed policies) or resource-based (often inline policies created by users). Every AWS resource is identified by an ARN (Amazon Resource Name).
+
+Here is an example of an IAM policy in YAML format:
+```yamlVersion: '2012-10-17'
+Statement:
+  - Effect: Allow
+    Action: s3:*
+    Resource: arn:aws:s3:::example-bucket/*
+```
+This policy allows all S3 actions on the specified bucket.    
+
+We can also define an IAM user with a policy attached:
+```yamlResources:
+  MyIAMUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: example-user
+      Policies:
+        - PolicyName: example-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow         
+                Action: s3:*
+                Resource: arn:aws:s3:::example-bucket/*
+```
+This example creates an IAM user named "example-user" with a policy that allows all S3 actions on the specified bucket.
+ 
+By default resources in aws will not talk to each other unless explicitly allowed. This is a key security feature of AWS IAM. so we create roles to allow resources to talk to each other. For example, if an EC2 instance needs to access an S3 bucket, we create a role with the necessary permissions and attach it to the EC2 instance. This way, the EC2 instance can access the S3 bucket without needing to store access keys on the instance itself. Here is an example of creating a role and attaching it to an EC2 instance:
+Roles are also used for tempeary access without credentials.
